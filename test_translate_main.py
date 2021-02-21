@@ -1,5 +1,15 @@
 import sys
 import os
+import fnmatch
+
+import logging, coloredlogs
+
+coloredlogs.install()
+logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+#print = lambda *tup : logging.info(str(" ".join([str(x) for x in tup]))) 
+
+logging.info('from logging')
+logging.error('error from logging')
 
 inc_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(inc_path)
@@ -13,7 +23,7 @@ def dummy(file_in, file_out):
     pass
 
 STEPS = [
-    ['.pdf', dummy],
+#    ['.pdf', dummy],
     ['.docx', lib.trans.trans],
     ['.docx-cn.docx', lib.docx_add_heading.add_heading],
     ['.docx-cn-contents.docx', lib.docx2pdf.docx2pdf],
@@ -22,11 +32,13 @@ STEPS = [
 
 N_STEPS = len(STEPS)
 
-EXTS_SKIP = ['-cn.pdf']
+EXTS_SKIP = ['*-cn.pdf', '*.docx-0.??-cn.docx', '*\\~$*']
+
+assert(fnmatch.fnmatch('xx-cn.pdf','*-cn.pdf'))
 
 def main_file(file):
     for ext in EXTS_SKIP:
-        if file.endswith(ext):
+        if fnmatch.fnmatch(file,ext):
             return
 
     file_no_ext = None
@@ -58,4 +70,6 @@ def main_folder(folder):
     for file in os.listdir(folder):
         main_file(folder + '\\' + file)
 
-main_folder(r'g:\done')
+folder = sys.argv[1] if len(sys.argv)>1 else r'g:\done'
+print(folder)
+main_folder(folder)

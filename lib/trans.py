@@ -1,9 +1,9 @@
-from googletrans import Translator
+from .mygoogletrans import Translator
 import sys
 import os
 import docx
 import requests
-import threading
+#import threading
 from datetime import datetime
 import time
 
@@ -90,10 +90,14 @@ def trans(fname, foname):
         spacer = '\n========================\n'
         spacer_short = '========================'
         subCont = doc.paragraphs[i].text_2
+        
         j = i+1
-        while len(subCont) < 4500 and j < N:
+        while len(subCont) < 1500 and j < N:
             subCont = subCont + spacer + doc.paragraphs[j].text_2
             j = j+1
+        #print(subCont)
+        #os.system('pause')
+        
         # print(fname,i,j,N)
         timeEstimator.updateProgress(percentage)
         display_mgr.update(os.path.basename(
@@ -101,6 +105,7 @@ def trans(fname, foname):
         if subCont.strip():
             # try:
             s = translator.translate(subCont, src='en', dest='zh-cn')
+            #print(s.text)
             ss = s.text.split(spacer_short)
             if len(ss) == j-i:
                 for k in range(j-i):
