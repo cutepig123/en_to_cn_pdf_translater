@@ -25,7 +25,11 @@ class Translator:
         url = 'https://translate.google.com.hk/?hl=en&tab=rT&sl=en&tl=zh-CN&op=translate'
         browser.get(url)
 
-        
+    def __del__(self):
+        self.browser.close()
+        self.browser.quit()
+        logging.info ('quited')
+       
     def translate(self, content, src='', dest=''):
         logging.info ('translating %s', content)
         browser = self.browser
@@ -36,18 +40,34 @@ class Translator:
         input = wait.until(EC.presence_of_element_located(
             (By.XPATH, '/html/body/c-wiz/div/div[2]/c-wiz/div[2]/c-wiz/div[1]/div[2]/div[2]/c-wiz[1]/span/span/div/textarea')))
         #time.sleep(3)
+        
         logging.info('clear input element')
         input.clear()
-        logging.info('send data to input element')
-        input.send_keys(content)
+        
+        if 0:
+            logging.info('send data to input element')
+            input.send_keys(content)
+        else:
+            logging.info('send script to input element')
+            browser.execute_script('''
+                //var t = document.evaluate("//textarea", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                var t = arguments[1];
+                t.focus();
+                t.value=arguments[0];
+                //var event = new CustomEvent('change');
+                //t.dispatchEvent(event); // no effect
+                //t.change(); // run error
+                ''', content, input)
+            input.send_keys(' \n')
+
         logging.info('sleep3s')
         time.sleep(3)
-
+        
         logging.info('try get output element')
         output = wait.until(EC.presence_of_element_located(
             (By.XPATH, "//*[@class='J0lOec']")))
-        logging.info('sleep3s')
-        time.sleep(3)
+        # logging.info('sleep3s')
+        # time.sleep(3)
         #output.clear()
         innerText = output.get_attribute("innerText")
         logging.info('output is  %s', innerText)

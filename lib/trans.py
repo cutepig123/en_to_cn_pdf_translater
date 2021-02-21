@@ -92,7 +92,7 @@ def trans(fname, foname):
         subCont = doc.paragraphs[i].text_2
         
         j = i+1
-        while len(subCont) < 1500 and j < N:
+        while len(subCont) < 4500 and j < N:
             subCont = subCont + spacer + doc.paragraphs[j].text_2
             j = j+1
         #print(subCont)
