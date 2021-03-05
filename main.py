@@ -20,10 +20,22 @@ import lib.docx2pdf
 
 def dummy(file_in, file_out):
     #print(file_in, file_out)
-    pass
+    return False    # DO Not continue processing
+
+def print_not_ready_file(file_in, file_out):
+    logging.info('not ready file %s', file_in)
+    return False
+
+# def move_to_done_final(file_in, file_out):
+#     #print(file_in, file_out)
+#     assert(file_in.endswith('.docx-cn-contents.pdf'))
+#     file_in_no_ext = file_in[:-len('.docx-cn-contents.pdf')]
+#     file_out
+#     folder_out_no_ext = file_out[:-len('.docx-cn-contents.pdf')]
+#     pass
 
 STEPS = [
-#    ['.pdf', dummy],
+    ['.pdf', print_not_ready_file],
     ['.docx', lib.trans.trans],
     ['.docx-cn.docx', lib.docx_add_heading.add_heading],
     ['.docx-cn-contents.docx', lib.docx2pdf.docx2pdf],
@@ -64,12 +76,14 @@ def main_file(file):
             fn = STEPS[i][1]
             file_src = file_no_ext + ext
             file_des = file_no_ext + ext_des
-            fn(file_src, file_des)
+            #If current step fails. do not continue
+            if not fn(file_src, file_des):
+                break
 
 def main_folder(folder):
     for file in os.listdir(folder):
         main_file(folder + '\\' + file)
 
-folder = sys.argv[1] if len(sys.argv)>1 else r'g:\done'
+folder = sys.argv[1] if len(sys.argv)>1 else r'G:\done'
 print(folder)
 main_folder(folder)

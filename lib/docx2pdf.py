@@ -24,3 +24,4 @@ def docx2pdf(src, des):
     doc.Close()
 
     word.Quit()
+    return True

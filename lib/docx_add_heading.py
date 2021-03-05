@@ -70,4 +70,4 @@ def add_heading(file, file_new):
     paragraph.style = document.styles['Heading 1']
     # 保存文档
     document.save(file_new)
-
+    return True

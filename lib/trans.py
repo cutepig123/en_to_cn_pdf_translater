@@ -89,10 +89,10 @@ def trans(fname, foname):
 
         spacer = '\n========================\n'
         spacer_short = '========================'
-        subCont = doc.paragraphs[i].text_2
+        subCont = doc.paragraphs[i].text_2.replace('\r',' ').replace('\n',' ')
         
         j = i+1
-        while len(subCont) < 4500 and j < N:
+        while len(subCont) < 4000 and j < N:
             subCont = subCont + spacer + doc.paragraphs[j].text_2
             j = j+1
         #print(subCont)
@@ -125,4 +125,4 @@ def trans(fname, foname):
     timeEstimator.updateProgress(1)
     display_mgr.update(os.path.basename(
             fname), '%5d %5d %5d %.3f %s' % (N, N, N, 1.0,timeEstimator.getEstLeftTime()))
-
+    return True
