@@ -84,6 +84,6 @@ def main_folder(folder):
     for file in os.listdir(folder):
         main_file(folder + '\\' + file)
 
-folder = sys.argv[1] if len(sys.argv)>1 else r'G:\done'
+folder = sys.argv[1] if len(sys.argv)>1 else r'.'
 print(folder)
 main_folder(folder)

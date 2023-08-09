@@ -118,6 +118,7 @@ def trans(fname, foname):
                 MyAddRun(docdes.paragraphs[j-1], '\n' + s.text + '\n')
             # except Exception as e:
             #    print('except:', e)
+            #os.system('pause')
         i = j
 
     docdes.save(foname)

@@ -17,7 +17,10 @@ class Result:
 
 class Translator:
     def __init__(self):
-        browser = webdriver.Chrome()
+        # https://stackoverflow.com/questions/62218033/chromedriver-cant-login-to-google-account
+        options = webdriver.ChromeOptions()
+        #options.add_argument(r"user-data-dir=c:\Users\cutep\AppData\Local\Google\Chrome\User Data")
+        browser = webdriver.Chrome(options=options)
         browser.maximize_window()  # 最大化窗口
         
         self.browser = browser
