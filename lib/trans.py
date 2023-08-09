@@ -1,4 +1,4 @@
-from .mygoogletrans import Translator
+from .mygoogletrans2 import Translator
 import sys
 import os
 import docx
@@ -89,11 +89,11 @@ def trans(fname, foname):
 
         spacer = '\n========================\n'
         spacer_short = '========================'
-        subCont = doc.paragraphs[i].text_2.replace('\r',' ').replace('\n',' ')
+        subCont = doc.paragraphs[i].text.replace('\r',' ').replace('\n',' ')
         
         j = i+1
-        while len(subCont) < 4000 and j < N:
-            subCont = subCont + spacer + doc.paragraphs[j].text_2
+        while len(subCont) < 1 and j < N:
+            subCont = subCont + spacer + doc.paragraphs[j].text
             j = j+1
         #print(subCont)
         #os.system('pause')
@@ -106,7 +106,7 @@ def trans(fname, foname):
             # try:
             s = translator.translate(subCont, src='en', dest='zh-cn')
             #print(s.text)
-            ss = s.text.split(spacer_short)
+            ss = s.split(spacer_short)
             if len(ss) == j-i:
                 for k in range(j-i):
                     sss = ss[k].strip()
@@ -115,7 +115,7 @@ def trans(fname, foname):
             else:
                 print('warning translate assumption mismatch %d, %d' %
                       (len(ss), j-i))
-                MyAddRun(docdes.paragraphs[j-1], '\n' + s.text + '\n')
+                MyAddRun(docdes.paragraphs[j-1], '\n' + s + '\n')
             # except Exception as e:
             #    print('except:', e)
             #os.system('pause')
