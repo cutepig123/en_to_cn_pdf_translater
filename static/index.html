@@ -1,40 +1,57 @@
-<form action="/upload" method="POST" enctype="multipart/form-data">
-  <input type="file" name="document" id="fileInput" acceptx=".docx">
-  <input type="button" value="Upload" onclick="uploadFile()">
-  <progress id="progressBar" value="0" max="100"></progress>
-  <div id="uploadMessage" style="display: none;"></div>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Upload</title>
+</head>
+<body>
+  <h1>File Upload</h1>
+  <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="document" acceptx=".docx">
+    <input type="button" value="Upload" onclick="uploadFile()">
+  </form>
+  <div id="progressInfo" style="display: none;">
+    <p>Progress: <span id="progressPercent">0%</span></p>
+  </div>
+  <div id="downloadLink" style="display: none;">
+    <a id="downloadButton" href="">Download Translated File</a>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function uploadFile() {
+      var form = document.getElementById("uploadForm");
+      var formData = new FormData(form);
 
-<script>
-  function uploadFile() {
-    var fileInput = document.getElementById("fileInput");
-    var progressBar = document.getElementById("progressBar");
-    var uploadMessage = document.getElementById("uploadMessage");
-
-    var file = fileInput.files[0];
-    var xhr = new XMLHttpRequest();
-
-    xhr.upload.addEventListener("progress", function(event) {
-      if (event.lengthComputable) {
-        var percentComplete = (event.loaded / event.total) * 100;
-        progressBar.value = percentComplete;
-      }
-    });
-
-    xhr.addEventListener("load", function() {
-      if (xhr.status === 200) {
-        uploadMessage.style.display = "block";
-        uploadMessage.innerText = "File uploaded successfully!";
-      } else {
-        uploadMessage.style.display = "block";
-        uploadMessage.innerText = "File upload failed.";
-      }
-    });
-
-    
-    xhr.open("POST", "/upload");
-    var formData = new FormData();
-    formData.append("document", file);
-    xhr.send(formData);
-  }
-</script>
+      $.ajax({
+        url: "/upload",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        xhr: function() {
+          var xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener("progress", function(event) {
+            if (event.lengthComputable) {
+              var percentComplete = (event.loaded / event.total) * 100;
+              $("#progressPercent").text(percentComplete.toFixed(2) + "%");
+            }
+          }, false);
+          return xhr;
+        },
+        beforeSend: function() {
+          $("#uploadForm").hide();
+          $("#progressInfo").show();
+        },
+        success: function(response) {
+          $("#progressInfo").hide();
+          $("#downloadLink").show();
+          $("#downloadButton").attr("href", response);
+        },
+        error: function() {
+          $("#progressInfo").hide();
+          alert("An error occurred during file upload.");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
