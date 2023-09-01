@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
-    
+
 @app.route('/upload', methods=['POST'])
 def upload():
     file = request.files['document']
@@ -16,4 +16,4 @@ def upload():
     return 'File uploaded successfully'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=80)
