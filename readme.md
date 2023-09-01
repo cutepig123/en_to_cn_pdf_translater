@@ -4,8 +4,6 @@ A tool to translate English language pdf files to Chinese language pdf files
 
 将英文pdf翻译成中文文档的工具
 
-
-
 # Pre-requirements
 
 The tool depends on following s/ws
@@ -20,8 +18,6 @@ It is written in Python. It depends on following python packages
 - win32com
 - selenium
 - requests
-
-
 
 # How to use
 
@@ -44,6 +40,7 @@ G:\done>dir
 ```
 
 Call command
+
 ```bash
 python main.py G:\done
 ```
@@ -72,3 +69,15 @@ G:\done>dir
 ```
 
 the final pdf file is `4dx_book.docx-cn-contents.pdf`
+
+TODO
+
+* [X] 实现Flask服务器，允许用户上传文件
+  * [X] 上传文件大小限制
+* [ ] 权限管理
+  * [ ] 每个ip每一天最多免费翻译5页
+  * [ ] 超过5页需要付款
+* [ ] 扫码付款
+  * [ ] paypal
+  * [ ] alilay
+  * [ ] wechat
